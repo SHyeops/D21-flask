@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ c.name }} · 클래스로 마켓{% endblock %}
+{% block content %}
+{# 이 클래스와 같은 카테고리 목록으로 돌아가는 링크 #}
+<p><a href="{{ url_for('class_list', category=c.category) }}">← {{ c.category }} 목록</a></p>
+<p class="meta">{{ c.category }} · {{ c.region }}</p>
+<h1>{{ c.name }}</h1>
+<p class="price">{{ m.price(c) }}</p>
+<p class="rating">{{ m.rating(c) }}</p>
+
+{# 찜하기 버튼 — 값을 바꾸는 일이라 POST 폼으로 보내요 #}
+<form method="post" action="{{ url_for('toggle_wish', class_id=c.id) }}">
+  <button class="wish-btn {% if wished %}is-on{% endif %}" aria-pressed="{{ 'true' if wished else 'false' }}">
+    {% if wished %}♥ 찜 취소{% else %}♡ 찜하기{% endif %}
+  </button>
+</form>
+
+{# 수강 후기 남기기 폼 — 저장을 누르면 봉투(POST)에 담아 지금 이 주소로 보내요 #}
+<section class="review-box">
+  <h2>수강 후기 남기기</h2>
+  <form method="post" class="review-form">
+    {# label의 for와 input의 id가 같아야 라벨을 눌렀을 때 그 칸으로 가요 #}
+    <label for="nickname">닉네임</label>
+    {# name="nickname" 이 서버에서 request.form 으로 꺼낼 이름이에요 · required/maxlength는 브라우저 안내판일 뿐 #}
+    <input id="nickname" name="nickname" required maxlength="20" placeholder="1~20자">
+
+    <label for="star">별점</label>
+    <select id="star" name="star">
+      {% for n in range(5, 0, -1) %}<option value="{{ n }}">★ {{ n }}</option>{% endfor %}
+    </select>
+
+    <label for="content">후기 내용</label>
+    <textarea id="content" name="content" required maxlength="200" rows="4" placeholder="1~200자"></textarea>
+
+    <button>후기 저장</button>
+  </form>
+</section>
+
+{# 이 클래스의 후기 목록 — 값은 {{ }} 로만 보여 줘서 <b> 같은 글자도 글자 그대로 나와요 #}
+<section class="review-box">
+  <h2>수강 후기 {{ reviews | length }}개</h2>
+  <ul class="review-list">
+    {% for r in reviews %}
+      <li>
+        <p class="review-head"><strong>{{ r.nickname }}</strong> <span>★ {{ r.star }}</span></p>
+        <p>{{ r.content }}</p>
+      </li>
+    {% else %}
+      <li class="empty">아직 남겨진 후기가 없어요</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

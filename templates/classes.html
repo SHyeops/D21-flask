@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}클래스 목록 · 클래스로 마켓{% endblock %}
+{% block content %}
+<div class="list-head">
+  <h1>이번 주말, 뭐 배워볼까요?</h1>
+  <p class="list-count">{{ category or "전체" }} 원데이 클래스 {{ items|length }}개</p>
+</div>
+
+<div class="toolbar">
+  {# 카테고리 버튼: 누르면 /classes?category=…&sort=… 로 다시 주문해요 (정렬은 그대로 유지) #}
+  <nav class="cat-chips" aria-label="카테고리">
+    <a class="chip {% if not category %}is-on{% endif %}" href="{{ url_for('class_list', sort=sort or None) }}" {% if not category %}aria-current="page"{% endif %}>전체</a>
+    {% for name, count in cats %}
+    <a class="chip {% if name == category %}is-on{% endif %}" href="{{ url_for('class_list', category=name, sort=sort or None) }}" {% if name == category %}aria-current="page"{% endif %}>{{ name }}</a>
+    {% endfor %}
+  </nav>
+
+  {# 정렬 상자: 바꾸면 바로 다시 주문해요. 지금 고른 카테고리는 숨은 칸으로 같이 보내요 #}
+  <form class="sort-box" method="get" action="{{ url_for('class_list') }}">
+    {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+    <label for="sort">정렬</label>
+    <select id="sort" name="sort" onchange="this.form.submit()">
+      <option value="">추천순</option>
+      <option value="rating" {% if sort == "rating" %}selected{% endif %}>평점 높은순</option>
+      <option value="review" {% if sort == "review" %}selected{% endif %}>리뷰 많은순</option>
+      <option value="price" {% if sort == "price" %}selected{% endif %}>낮은 가격순</option>
+    </select>
+    <noscript><button type="submit">보기</button></noscript>
+  </form>
+</div>
+
+{% if items %}
+<ul class="cards">
+  {% for c in items %}
+  {{ m.card(c) }}
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">조건에 맞는 클래스가 없어요.</p>
+{% endif %}
+{% endblock %}

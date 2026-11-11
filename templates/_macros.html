@@ -1,0 +1,45 @@
+{# 목록과 상세가 같이 쓰는 '빈칸 처리' 조각. 한 곳만 고치면 두 화면이 같이 바뀌어요 #}
+
+{# 가격: 없으면 '가격 문의🤙', 할인 중이면 할인율 + 판매가 + 정가에 취소선 #}
+{% macro price(c) -%}
+  {% if c.price is none %}
+    <span class="price-ask">가격 문의🤙</span>
+  {% else %}
+    {% if c.on_sale and c.list_price %}
+      {# 할인율 = (1 - 판매가 ÷ 정가) × 100, 반올림 #}
+      <span class="price-rate">{{ ((1 - c.price / c.list_price) * 100) | round | int }}%</span>
+    {% endif %}
+    <strong class="price-now">{{ "{:,.0f}".format(c.price) }}원</strong>
+    {% if c.on_sale %}<del>{{ "{:,.0f}".format(c.list_price) }}원</del>{% endif %}
+  {% endif %}
+{%- endmacro %}
+
+{# 평점: 없으면 '아직 리뷰가 없어요😭' #}
+{% macro rating(c) -%}
+  {% if c.rating is none %}
+    <span class="rating-empty">아직 리뷰가 없어요😭</span>
+  {% else %}
+    <svg class="star" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+    <span class="rating-score">{{ "%.1f"|format(c.rating) }}</span>
+    <span class="rating-count">리뷰 {{ "{:,}".format(c.reviews) }}</span>
+  {% endif %}
+{%- endmacro %}
+
+{# 클래스 카드 한 장: 목록과 찜 목록이 같이 써요 #}
+{% macro card(c) -%}
+  <li class="card">
+    {# 카드 전체를 누르면 그 클래스의 상세 화면으로 가요 #}
+    <a href="{{ url_for('class_detail', class_id=c.id) }}">
+      <div class="card-photo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>
+        <span>클래스 사진</span>
+      </div>
+      <div class="card-body">
+        <p class="meta">{{ c.category }} · {{ c.region }}</p>
+        <h2>{{ c.name }}</h2>
+        <p class="price">{{ price(c) }}</p>
+        <p class="rating">{{ rating(c) }}</p>
+      </div>
+    </a>
+  </li>
+{%- endmacro %}

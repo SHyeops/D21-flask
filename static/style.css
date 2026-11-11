@@ -1,0 +1,96 @@
+/* ===== 디자인 값 (원티드 몽타주 참고) — 색을 바꾸려면 여기만 고치면 돼요 ===== */
+:root {
+  --brand: #0066FF;                                  /* 강조색: 할인율·포커스에만 */
+  --fg-strong: oklch(0.148 0.004 277);               /* 제목·가격 */
+  --fg: oklch(0.259 0.010 273 / 0.88);               /* 본문 */
+  --fg-sub: oklch(0.298 0.010 273 / 0.61);           /* 보조 글자 */
+  --line: oklch(0.521 0.018 273 / 0.12);             /* 카드 테두리 */
+  --line-strong: oklch(0.521 0.018 273 / 0.22);      /* 버튼·입력 테두리 */
+  --bg-soft: oklch(0.961 0.002 286);                 /* 사진 자리 배경 */
+  --font: "Pretendard JP", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+/* ===== 기본 틀 ===== */
+body { margin: 0; font-family: var(--font); color: var(--fg); line-height: 1.6; background: #fff; }
+header { display: flex; justify-content: space-between; align-items: center; height: 60px; padding: 0 20px; border-bottom: 1px solid var(--line); background: #fff; position: sticky; top: 0; z-index: 10; }
+.logo { font-weight: 700; font-size: 17px; color: var(--fg-strong); text-decoration: none; }
+nav a { margin-left: 20px; font-size: 14px; font-weight: 600; color: var(--fg); text-decoration: none; }
+nav a:hover { color: var(--fg-strong); }
+main { max-width: 1200px; margin: 0 auto; padding: 28px 20px 56px; box-sizing: border-box; }
+main h1 { color: var(--fg-strong); letter-spacing: -0.02em; }
+main a { color: var(--brand); }
+footer { padding: 16px; text-align: center; font-size: 13px; color: var(--fg-sub); border-top: 1px solid var(--line); }
+:focus-visible { outline: 3px solid oklch(0.563 0.241 261 / 0.4); outline-offset: 2px; }
+
+/* ===== 홈 화면 칩 ===== */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; flex: none; height: 44px; padding: 0 18px; box-sizing: border-box;
+        border: 1px solid var(--line-strong); border-radius: 999px; background: #fff;
+        font-size: 14px; font-weight: 600; color: var(--fg); text-decoration: none; transition: background .12s; }
+main a.chip { color: var(--fg); }
+.chip:hover { background: var(--bg-soft); }
+.chip.is-on, main a.chip.is-on { background: var(--fg-strong); border-color: var(--fg-strong); color: #fff; }
+
+/* ===== 목록 화면: 제목 ===== */
+.list-head h1 { margin: 0; font-size: 26px; font-weight: 700; line-height: 1.34; }
+.list-count { margin: 4px 0 0; font-size: 14px; font-weight: 500; color: var(--fg-sub); }
+
+/* ===== 목록 화면: 카테고리 버튼 + 정렬 상자 ===== */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 20px 0; }
+.cat-chips { display: flex; gap: 8px; overflow-x: auto; flex: 1 1 280px; min-width: 0; padding-bottom: 2px; }
+.cat-chips a { margin-left: 0; }
+.sort-box { display: flex; align-items: center; gap: 8px; }
+.sort-box label { font-size: 13px; font-weight: 500; color: var(--fg-sub); }
+.sort-box select { height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: #fff;
+                   font: inherit; font-size: 14px; font-weight: 600; color: var(--fg-strong); cursor: pointer; }
+.sort-box button { height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--brand); color: #fff; font: inherit; font-weight: 700; }
+
+/* ===== 목록 화면: 카드 (PC 3~4열, 휴대폰 1열 — 칸 너비로 자동) ===== */
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.card { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: #fff; transition: border-color .12s; }
+.card:hover { border-color: var(--line-strong); }
+.card a { display: block; color: inherit; text-decoration: none; height: 100%; }
+.card-photo { aspect-ratio: 4 / 3; background: var(--bg-soft); color: var(--fg-sub);
+              display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 12px; font-weight: 500; }
+.card-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 6px; }
+.card h2 { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.44; color: var(--fg-strong); }
+.meta { margin: 0; font-size: 13px; font-weight: 500; color: var(--fg-sub); }
+
+/* 가격 */
+.price { margin: 2px 0 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.price-rate { font-size: 18px; font-weight: 700; color: var(--brand); }
+.price-now { font-size: 18px; font-weight: 700; color: var(--fg-strong); font-variant-numeric: tabular-nums; }
+.price del { font-size: 13px; font-weight: 500; color: var(--fg-sub); }
+.price-ask { font-size: 17px; font-weight: 700; color: var(--fg-strong); }
+
+/* 평점 */
+.rating { margin: 0; display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; color: var(--fg-sub); }
+.star { fill: var(--fg-strong); }
+.rating-score { font-weight: 700; color: var(--fg-strong); }
+
+.empty { padding: 56px 0; text-align: center; color: var(--fg-sub); }
+
+/* ---------- 수강 후기 (폼 · 목록) ---------- */
+.review-box { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.review-box h2 { margin: 0 0 12px; font-size: 18px; color: var(--fg-strong); }
+.review-form { display: grid; gap: 6px; max-width: 480px; }
+.review-form label { margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--fg-sub); }
+.review-form input, .review-form select, .review-form textarea {
+  padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: #fff;
+  font: inherit; font-size: 15px; color: var(--fg-strong); }
+.review-form input, .review-form select { height: 44px; }
+.review-form button { margin-top: 12px; height: 44px; border: 0; border-radius: 12px; background: var(--brand);
+  color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.review-list { list-style: none; margin: 0; padding: 0; }
+.review-list li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.review-list li p { margin: 0; white-space: pre-line; }
+.review-head { display: flex; gap: 8px; font-size: 14px; color: var(--fg-sub); }
+.review-list .empty { padding: 32px 0; border: 0; }
+
+/* ---------- 한 번만 보이는 안내 (flash) ---------- */
+.flash { margin: 0 0 16px; padding: 12px 16px; border-radius: 12px; background: #ecfdf3; color: #05603a; font-size: 14px; font-weight: 600; }
+
+/* ---------- 찜하기 버튼 ---------- */
+.wish-btn { margin-top: 12px; height: 44px; padding: 0 18px; border: 1px solid var(--line-strong); border-radius: 12px;
+  background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: var(--fg-strong); cursor: pointer; }
+.wish-btn.is-on { border-color: var(--fg-strong); }

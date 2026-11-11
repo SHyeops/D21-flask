@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}찜 목록 · 클래스로 마켓{% endblock %}
+{% block content %}
+<div class="list-head">
+  <h1>찜 목록</h1>
+  {# 찜은 이 브라우저(세션)에만 저장돼요 — 다른 브라우저 · 시크릿 창에서는 따로예요 #}
+  <p class="list-count">이 브라우저에서 찜한 클래스 {{ items | length }}개</p>
+</div>
+{% if items %}
+<ul class="cards">
+  {% for c in items %}
+  {{ m.card(c) }}
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">아직 찜한 클래스가 없어요<br><a href="{{ url_for('class_list') }}">클래스 둘러보기</a></p>
+{% endif %}
+{% endblock %}

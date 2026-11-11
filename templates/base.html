@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {# 화면마다 제목을 바꿀 수 있는 구멍. 안 채우면 '클래스로 마켓'이 들어가요 #}
+  <title>{% block title %}클래스로 마켓{% endblock %}</title>
+  {# static/style.css 주소를 url_for가 대신 만들어 줘요 #}
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <a class="logo" href="{{ url_for('home') }}">클래스로 마켓</a>
+    <nav>
+      <a href="{{ url_for('home') }}">홈</a>
+      <a href="{{ url_for('class_list') }}">클래스</a>
+      <a href="{{ url_for('about') }}">소개</a>
+      {# 템플릿에서도 session을 바로 읽을 수 있어요. 찜한 개수를 메뉴에 보여 줘요 #}
+      <a href="{{ url_for('wishlist') }}">찜 목록 ({{ session.get('wish', []) | length }})</a>
+    </nav>
+  </header>
+  <main>
+    {# flash로 맡겨 둔 안내를 꺼내 보여 주는 자리. 한 번 꺼내면 사라져서 새로고침하면 안 보여요 #}
+    {% for msg in get_flashed_messages() %}
+      {# role="status": 화면 읽기 프로그램도 안내를 읽어 줘요 · ✓ 글자로 색 없이도 성공을 알 수 있게 #}
+      <p class="flash" role="status">✓ {{ msg }}</p>
+    {% endfor %}
+    {# 물려받는 화면이 본문을 채우는 자리 #}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>© 클래스로 마켓 · 연습용 서비스</footer>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>클래스로 마켓에 오신 것을 환영해요!</h1>
+{# total은 app.py가 데이터에서 센 숫자예요 — 글자로 박지 않아요 #}
+<p>지금 <strong>{{ total }}개</strong>의 원데이 클래스가 있어요.</p>
+<div class="chips">
+  <a class="chip" href="{{ url_for('class_list') }}">전체</a>
+  {% for name, count in cats %}
+  <a class="chip" href="{{ url_for('class_list', category=name) }}">{{ name }} {{ count }}</a>
+  {% endfor %}
+</div>
+{% endblock %}

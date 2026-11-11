@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}찾는 페이지가 없어요 · 클래스로 마켓{% endblock %}
+{% block content %}
+<h1>찾는 페이지가 없어요</h1>
+<p>주소가 바뀌었거나 없는 클래스예요.</p>
+<p><a href="{{ url_for('class_list') }}">클래스 목록으로 가기</a></p>
+{% endblock %}
